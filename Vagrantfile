@@ -10,8 +10,14 @@ nodes_config = (JSON.parse(File.read("nodes.json")))['nodes']
 VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-  config.vm.box     = "vagrant-oracle-vm-saucy64"
-  config.vm.box_url = "http://cloud-images.ubuntu.com/vagrant/saucy/current/saucy-server-cloudimg-amd64-vagrant-disk1.box"
+  config.vm.box     = "puppetlabs/centos-6.6-64-puppet"
+
+  # hostmanager
+  config.hostmanager.enabled = true
+  config.hostmanager.manage_host = true
+  config.hostmanager.manage_guest = true
+  config.hostmanager.ignore_private_ip = false
+  config.hostmanager.include_offline = false
 
   nodes_config.each do |node|
     node_name   = node[0] # name of node
@@ -35,8 +41,14 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         vb.customize ["modifyvm", :id, "--name", node_values[':node']]
       end
 
+	  config.vm.provision :hostmanager
+
       # Node configuration section
-	  config.vm.provision :shell, :path => node_values[':bootstrap']	
+	  config.vm.provision :shell, :path => node_values[':bootstrap']
+
+	  # Alternatively we could use the existing puppet modules
+	  # more info at https://www.vagrantup.com/docs/provisioning/puppet_apply.html
+
     end
   end
 end
