@@ -23,11 +23,12 @@ function vagrant_destroy {
 
 }
 
-function ip_addressing {
+function generate_ip {
 
 }
 
 function generate_json {
+	 
 
 }
 

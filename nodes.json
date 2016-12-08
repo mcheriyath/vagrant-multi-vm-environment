@@ -1,0 +1,69 @@
+{
+  "nodes": {
+    "apps": {
+      ":node": "ApplicationServer-201",
+      ":ip": "192.168.33.21",
+      ":host": "apps.server-201",
+      "ports": [
+        {
+          ":host": 2201,
+          ":guest": 22,
+          ":id": "ssh"
+        }
+      ],
+      ":memory": 2048
+    },
+    "db": {
+      ":node": "DatabaseServer-201",
+      ":ip": "192.168.33.22",
+      ":host": "db.server-201",
+      "ports": [
+        {
+          ":host": 2202,
+          ":guest": 22,
+          ":id": "ssh"
+        }
+      ],
+      ":memory": 2048
+    },
+    "admin": {
+      ":node": "AdminServer-201",
+      ":ip": "192.168.33.23",
+      ":host": "admin.server-201",
+      "ports": [
+        {
+          ":host": 2203,
+          ":guest": 22,
+          ":id": "ssh"
+        }
+      ],
+      ":memory": 1024
+    },
+    "mongo": {
+      ":node": "MongoServer-201",
+      ":ip": "192.168.33.24",
+      ":host": "mongo.server-201",
+      "ports": [
+        {
+          ":host": 2204,
+          ":guest": 22,
+          ":id": "ssh"
+        }
+      ],
+      ":memory": 1024
+    },
+    "solr": {
+      ":node": "SolrServer-201",
+      ":ip": "192.168.33.25",
+      ":host": "solr.server-201",
+      "ports": [
+        {
+          ":host": 2205,
+          ":guest": 22,
+          ":id": "ssh"
+        }
+      ],
+      ":memory": 1024
+    }
+  }
+}
