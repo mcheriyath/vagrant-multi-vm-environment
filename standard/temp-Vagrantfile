@@ -1,0 +1,92 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# Multi-VM Configuration: Builds Web, Application, and Database Servers using JSON config file
+# Configures VMs based on Hosted Chef Server defined Environment and Node (vs. Roles)
+
+VAGRANTFILE_API_VERSION = "2"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  config.vm.box     = "puppetlabs/centos-6.6-64-puppet"
+
+  # hostmanager
+  config.hostmanager.enabled = true
+  config.hostmanager.manage_host = true
+  config.hostmanager.manage_guest = true
+  config.hostmanager.ignore_private_ip = false
+  config.hostmanager.include_offline = false
+
+
+  # Apps server
+  config.vm.define :app do |config|
+    config.vm.host_name = "app.local"
+    config.vm.customize ["modifyvm", :id, "--name", "app"]
+    config.vm.forward_port 443, 443
+    config.vm.forward_port 61616, 61616
+    config.vm.forward_port 8161, 8161
+    config.vm.network :private_network, "192.168.33.10"
+    config.vm.provision :puppet do |puppet|
+	  puppet.manifests_path = "puppet/manifests"
+      puppet.module_path = "puppet/modules"
+      puppet.manifest_file = "app.pp"
+    end
+  end
+
+  # DB server
+  config.vm.define :db do |config|
+    config.vm.host_name = "db.local"
+    config.vm.customize ["modifyvm", :id, "--name", "db"]
+    config.vm.network "forwarded_port", guest: 5432, host:5432, protocol: "tcp"
+    config.vm.network "forwarded_port", guest: 5432, host:5432, protocol: "udp"
+    config.vm.network :private_network, "192.168.33.11"
+    #config.vm.provision :puppet do |puppet|
+	#  puppet.manifests_path = "puppet/manifests"
+    #  puppet.module_path = "puppet/modules"
+    #  puppet.manifest_file = "db.pp"
+    #end
+  end
+
+  # Admin server
+  config.vm.define :admin do |config|
+    config.vm.host_name = "admin.local"
+    config.vm.customize ["modifyvm", :id, "--name", "admin"] 
+    config.vm.forward_port 80, 80
+    config.vm.forward_port 443, 443
+    config.vm.network :private_network, "192.168.33.12"
+    config.vm.provision :puppet do |puppet|
+	  puppet.manifests_path = "puppet/manifests"
+      puppet.module_path = "puppet/modules"
+      puppet.manifest_file = "admin.pp"
+    end
+  end
+
+  # MongoDB server
+  config.vm.define :mongo do |config|
+    config.vm.host_name = "mongodb.local"
+    config.vm.customize ["modifyvm", :id, "--name", "mongodb"] 
+    config.vm.forward_port 27017, 27017
+    config.vm.forward_port 27018, 27018
+    config.vm.forward_port 27019, 27019
+    config.vm.forward_port 28017, 28017
+    config.vm.network :private_network, "192.168.33.13"
+    config.vm.provision :puppet do |puppet|
+	  puppet.manifests_path = "puppet/manifests"
+      puppet.module_path = "puppet/modules"
+      puppet.manifest_file = "mongo.pp"
+    end
+  end
+
+  # Solr Server
+  config.vm.define :solr do |config|
+    config.vm.host_name = "solr.local"
+    config.vm.customize ["modifyvm", :id, "--name", "solr"]
+    config.vm.forward_port 8983, 8983
+    config.vm.forward_port 7574, 7574
+    config.vm.network :private_network, "192.168.33.14"
+    config.vm.provision :puppet do |puppet|
+	  puppet.manifests_path = "puppet/manifests"
+      puppet.module_path = "puppet/modules"
+      puppet.manifest_file = "solr.pp"
+    end
+  end
+end
