@@ -11,7 +11,8 @@
           ":id": "ssh"
         }
       ],
-      ":memory": 2048
+      ":memory": 2048,
+	  ":bootstrap": "bootstrap-apps.sh"
     },
     "db": {
       ":node": "DatabaseServer-201",
@@ -24,7 +25,8 @@
           ":id": "ssh"
         }
       ],
-      ":memory": 2048
+      ":memory": 1024,
+	  ":bootstrap": "bootstrap-db.sh"
     },
     "admin": {
       ":node": "AdminServer-201",
@@ -37,7 +39,8 @@
           ":id": "ssh"
         }
       ],
-      ":memory": 1024
+      ":memory": 1024,
+	  ":bootstrap": "bootstrap-admin.sh"
     },
     "mongo": {
       ":node": "MongoServer-201",
@@ -50,7 +53,8 @@
           ":id": "ssh"
         }
       ],
-      ":memory": 1024
+      ":memory": 1024,
+	  ":bootstrap": "bootstrap-mongo.sh"
     },
     "solr": {
       ":node": "SolrServer-201",
@@ -63,7 +67,8 @@
           ":id": "ssh"
         }
       ],
-      ":memory": 1024
+      ":memory": 1024,
+	  ":bootstrap": "bootstrap-solr.sh"
     }
   }
 }
