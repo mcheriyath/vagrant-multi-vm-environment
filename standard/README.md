@@ -10,18 +10,24 @@ Step 1. Get oracle-xe-11.2.0-1.0.x86_64.rpm from [oracle downloads](http://www.o
 Step 2. Downloaded a few puppet modules: [fiddyspence-sysctl](https://forge.puppet.com/fiddyspence/sysctl) and [erwbgy-limits](https://forge.puppet.com/erwbgy/limits) <br>
 Step 3. Copied xe.rsp and sql scripts onto root folder <br>
 Step 4. Start oracle vm within the vagrant<br>
-> time vagrant up db
-
+````code
+time vagrant up db
+````
 Step 5. To destroy without confirmation(force) <br>
-> time vagrant destroy db -f
-
+````code
+time vagrant destroy db -f
+````
 ##### mongodb <br>
 
 Start mongo vm within the vagrant<br>
-> time vagrant up mongo
-
+````code
+time vagrant up mongo
+````
 Sometimes puppetlabs-mongodb module throws an error for not finding the right package. If that occurs we need to re-run a provision <br>
-> time vagrant provision mongo
-
+````code
+time vagrant provision mongo
+````
 To destroy without confirmation(force) <br>
-> time vagrant destroy mongo -f
+````code
+time vagrant destroy mongo -f
+````
