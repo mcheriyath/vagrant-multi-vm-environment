@@ -16,6 +16,7 @@ Step 5. To destroy without confirmation(force) <br>
 > time vagrant destroy db -f
 
 - mongodb <br>
+
 Start mongo vm within the vagrant<br>
 > time vagrant up mongo
 
