@@ -21,12 +21,19 @@ Vagrant.configure("2") do |config|
     db.vm.box = "puppetlabs/centos-6.6-64-puppet"
 
     db.vm.network :private_network, ip: "192.168.56.102"
-
+    db.vm.provision :shell, :inline => "sudo rm /etc/localtime && sudo ln -s /usr/share/zoneinfo/US/Eastern /etc/localtime"
     db.vm.provider :virtualbox do |v|
       v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
       v.customize ["modifyvm", :id, "--memory", 2048]
       v.customize ["modifyvm", :id, "--name", "db"]
     end
+    config.vm.provision :puppet do |puppet|
+      puppet.manifests_path = "puppet/manifests"
+      puppet.module_path = "puppet/modules"
+      puppet.manifest_file = "oracle.pp"
+	  puppet.options = "--verbose --debug"
+    end
+
   end
   
   config.vm.define "admin" do |admin|
