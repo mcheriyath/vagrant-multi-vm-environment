@@ -1,0 +1,80 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+
+Vagrant.configure("2") do |config|
+  config.vm.define "app" do |app|
+    app.vm.hostname = 'app'
+    app.vm.box = "puppetlabs/centos-6.6-64-puppet"
+
+    app.vm.network :private_network, ip: "192.168.56.101"
+
+    app.vm.provider :virtualbox do |v|
+      v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+      v.customize ["modifyvm", :id, "--memory", 1024]
+      v.customize ["modifyvm", :id, "--name", "app"]
+    end
+  end
+
+  config.vm.define "db" do |db|
+    db.vm.hostname = 'db'
+    db.vm.box = "puppetlabs/centos-6.6-64-puppet"
+
+    db.vm.network :private_network, ip: "192.168.56.102"
+
+    db.vm.provider :virtualbox do |v|
+      v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+      v.customize ["modifyvm", :id, "--memory", 2048]
+      v.customize ["modifyvm", :id, "--name", "db"]
+    end
+  end
+  
+  config.vm.define "admin" do |admin|
+    admin.vm.hostname = 'admin'
+    admin.vm.box = "puppetlabs/centos-6.6-64-puppet"
+
+    admin.vm.network :private_network, ip: "192.168.56.102"
+
+    admin.vm.provider :virtualbox do |v|
+      v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+      v.customize ["modifyvm", :id, "--memory", 1024]
+      v.customize ["modifyvm", :id, "--name", "admin"]
+    end
+  end
+  
+  config.vm.define "mongo" do |mongo|
+    mongo.vm.hostname = 'mongo'
+    mongo.vm.box = "puppetlabs/centos-6.6-64-puppet"
+	mongo.vm.box_version = "1.0.1" # Fix for Error: –manifestdir while privisioning puppet
+    mongo.vm.network :forwarded_port, guest: 27017, host: 27017, auto_correct: true
+    mongo.vm.network :private_network, ip: "192.168.56.102"
+
+    config.vm.provision :puppet do |puppet|
+      puppet.manifests_path = "puppet/manifests"
+      puppet.module_path = "puppet/modules"
+      puppet.manifest_file = "mongo.pp"
+	  puppet.options = "--verbose --debug"
+    end
+
+
+    mongo.vm.provider :virtualbox do |v|
+      v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+      v.customize ["modifyvm", :id, "--memory", 1024]
+      v.customize ["modifyvm", :id, "--name", "mongo"]
+    end
+  end
+  
+  config.vm.define "solr" do |solr|
+    solr.vm.hostname = 'solr'
+    solr.vm.box = "puppetlabs/centos-6.6-64-puppet"
+
+    solr.vm.network :private_network, ip: "192.168.56.102"
+
+    solr.vm.provider :virtualbox do |v|
+      v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+      v.customize ["modifyvm", :id, "--memory", 1024]
+      v.customize ["modifyvm", :id, "--name", "solr"]
+    end
+  end
+  
+end
